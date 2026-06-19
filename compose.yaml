@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql-container:
-    image: sinseungmin/buildmysql:1.0
+    image: greenhoon/buildmysql:1.0
     container_name: mysql-container
     restart: unless-stopped
     ports:
@@ -25,7 +25,7 @@ services:
       - springboot-mysql-net
 
   springedu2-container:
-    image: sinseungmin/ssmspringedu2:1.0
+    image: greenhoon/hthspringedu2:1.0
     container_name: springedu2-container
     restart: unless-stopped
     ports:

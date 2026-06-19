@@ -83,13 +83,14 @@ public class VisitorController {
     // /one 망령록 id 로 조회 : Rest방식 호출 결과: json
     // return 값이 Visitor 객체일때  json으로 변경되어 다운로드된다
     // return 값이 ResponseEntity<Visitor> 일때는 data는 json으로 상태코드로 리턴가능
+    // http://localhost:9090/one?id=1
     @GetMapping(value="/one", produces = "application/json; charset=utf-8")
     @ResponseBody
     public ResponseEntity<Visitor> one(@RequestParam  Integer id) {
         return visitorRepository.findById( Long.valueOf(id) ) // data 를 id 롤 조회 있으면 Visitor 리턴
                 .map(ResponseEntity::ok)  // 상태코드 ok 200 를 추가해서 리턴
                 .orElseGet(()-> ResponseEntity.notFound().build());
-        //  못찾으면 null 대신에 404 코드를 객체로 바꾸어서(.build()) 리턴
+                   //  못찾으면 null 대신에 404 코드를 객체로 바꾸어서(.build()) 리턴
     }
 
     /*
@@ -132,11 +133,11 @@ public class VisitorController {
     // /vdelete
     @PostMapping("/vdelete")
     @Transactional
-    public String delete( @RequestParam Integer id,
-                          RedirectAttributes redirectAttributes ){
-        if(!visitorRepository.existsById( Long.valueOf(id) ) ){
+    public  String  delete(@RequestParam  Integer id,
+                           RedirectAttributes redirectAttributes) {
+        if(!visitorRepository.existsById(Long.valueOf(id) ) ) {
             redirectAttributes.addFlashAttribute("msg",
-                    "삭제할 방명록을 찾을수 없습니다");
+                    "삭제할 방명록을  찾을 수 없습니다");
             return "redirect:/vlist";
         }
         visitorRepository.deleteById(Long.valueOf(id));
@@ -146,16 +147,16 @@ public class VisitorController {
     // /vsearch
     // findByMemoContainingIgnoreCaseOrderByIdDesc(key)
     // 검색 : 모두 대문자로 검색어를 포함한 data
-    // 단   정렬 id 를 내림차순으로 출력한다
+    //  단    정렬  id 를 내람차순으로 출력한다
     @GetMapping("/vsearch")
-    public ModelAndView search(@RequestParam(defaultValue = "") String key) {
-        List<Visitor> visitors = key.isBlank()
-                ? visitorRepository.findAll()
-                : visitorRepository.findByIrum(key);
-       //         : visitorRepository.findByMemoContainingIgnoreCaseOrderByIdDesc(key);
-       //         : visitorRepository.findByName(key);
+    public ModelAndView search(@RequestParam(defaultValue = "")  String key) {
+        List<Visitor>  visitors = key.isBlank()
+                ?   visitorRepository.findAll()
+                :   visitorRepository.findByIrum(key);
+           //     :   visitorRepository.findByMemoContainingIgnoreCaseOrderByIdDesc(key);
+           //     :   visitorRepository.findByName(key);
         System.out.println( visitors );
-        return visitorView(visitors, "메인으로 돌아가기");
+        return  visitorView(visitors, "메인으로 돌아가기");
     }
 
-}// Controller end
+}  // Controller end

@@ -4,13 +4,14 @@ server:
 spring:
   application:
     name: springedu2
-  # datasource와 jpa는 나란히 같은 레벨에 있어야 합니다.
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
-    #url: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    # url: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: jdbctest
     password: jdbctest
+
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:

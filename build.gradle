@@ -42,8 +42,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-bootJar{
-    archiveBaseName = 'springedu2'
-    archiveFileName = 'springedu2.jar'
-    archiveVersion = "0.0.1"
+bootJar {
+    archiveBaseName='springedu2'
+    archiveFileName='springedu2.jar'
+    archiveVersion="0.0.1"
 }

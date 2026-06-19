@@ -2,17 +2,17 @@
 
 @font-face {
     font-family: 'CookieRunRegular';
-    src: url("../fonts/CookieRun Regular.otf") format('opentype');
+    src: url('../fonts/CookieRun-Regular.otf') format('opentype');
 }
 
 @font-face {
     font-family: 'CookieRunBold';
-    src: url('../fonts/CookieRun Bold.otf') format('opentype');
+    src: url('../fonts/CookieRun-Bold.otf') format('opentype');
 }
 
 @font-face {
     font-family: 'CookieRunBlack';
-    src: url('../fonts/CookieRun Black.otf') format('opentype');
+    src: url('../fonts/CookieRun-Black.otf') format('opentype');
 }
 
 * {
