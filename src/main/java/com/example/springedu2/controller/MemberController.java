@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
     /* 생성자 주입
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -43,8 +43,12 @@ public class MemberController {
         }
 
         // 회원가입 : db 에 저장
-        memberService.register( memberForm );
-
+        try {
+            memberService.register(memberForm);
+        } catch (IllegalArgumentException e) {
+            bindingResult.reject( "가입실패", e.getMessage() );
+            return "memberRegister";
+        }
         redirectAttributes.addFlashAttribute("msg",
                 "회원가입이 완료되었습니다");
 

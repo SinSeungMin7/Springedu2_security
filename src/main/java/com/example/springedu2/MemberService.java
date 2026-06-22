@@ -5,6 +5,8 @@ import com.example.springedu2.entity.Member;
 import com.example.springedu2.entity.Role;
 import com.example.springedu2.repository.MemberRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder  passwordEncoder;
 
 
     // 로그인을 위해 db 에서 회원정보를 조회해서 UserDetails를 생성
@@ -53,15 +55,26 @@ public class MemberService implements UserDetailsService {
     @Transactional
     private Member create(MemberCreateForm memberForm) {
         // 기존회원인지 조회
+        validNewMember(memberForm.getUsername(), memberForm.getEmail());
 
         Member member = new Member();
         member.setUsername( memberForm.getUsername() );
         member.setPassword( passwordEncoder.encode( memberForm.getPassword() ) );
         member.setName( memberForm.getName() );
         member.setEmail( memberForm.getEmail() );
-        member.setRole( parseRole( member.getRole() ) );
+        member.setRole( parseRole( member.getRole().name() ) );
         member.setEnabled( true );
         return  memberRepository.save( member );
+    }
+
+    // 기존회원인지 체크
+    private void validNewMember(String username, String email) {
+        if ( memberRepository.existsByUsername( username ) ) {
+            throw new IllegalArgumentException("이미 사용중인 아이디 입니다");
+        }
+        if( memberRepository.existsByEmailIgnoreCase( email ) ) {
+            throw new IllegalArgumentException("이미 사용중인 이메일 입니다");
+        }
     }
 
     // 권한 문자열 변환 "ADMIN", "USER" -> Role.ADMIN
