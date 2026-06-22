@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="/css/visitor.css">
+    <style>
+
+
+    </style>
+</head>
+<body>
+    <div class="box">
+      <h2>회원가입</h2>
+      <form method="post" th:action="@{/members/register}" th:object="${memberForm}">
+        <div class="error" th:if="${#fields.hasGlobalErrors()}"
+             th:each="err : ${#fields.errors('global')}"
+             th:text="${err}">"
+        </div>
+        <!--
+            <div class="error" th:if="${#fields.hasGlobalErrors()}"
+                 th:each="err : ${#fields.errors('global')}"
+                 th:text="${err}">"
+            </div>
+            -------------------------------------------------------------- => 둘다 같은 말이다
+            <c:if test="">
+              <c:forEach var="" items="${#fields.hasGlobalErrors()}">
+                <div>${err}</div>
+              </c:forEach>
+            </c:if>
+        -->
+        <label>아이디
+          <input type="text" th:field="*{username}"placeholder="4자 이상" required>  <!-- '*' 이유 th:object 에서 칼럼에있는것을 찾기위해 쓴다 -->
+          <span class="error" th:errors="*{username}"></span>
+        </label>
+
+        <label>비밀번호
+          <input type="password" th:field="*{password}"placeholder="4자 이상" required>
+          <span class="error" th:errors="*{password}"></span>
+        </label>
+
+        <label>이름
+          <input type="text" th:field="*{name}"placeholder="최대 30자" required>
+          <span class="error" th:errors="*{name}"></span>
+        </label>
+
+        <label>이메일
+          <input type="email" th:field="*{email}"placeholder="120자 까지" required>
+          <span class="error" th:errors="*{email}"></span>
+        </label>
+
+        <button type="submit">가입</button>
+        <a th:href="@{/login}"><button type="button">로그인으로</button></a>
+
+      </form>
+    </div>
+
+
+
+
+</body>
+</html>
