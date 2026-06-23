@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
 
     private final MemberService memberService;
+
     /* 생성자 주입
     public  MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -66,7 +67,7 @@ public class MemberController {
     // 방명록으로
     @GetMapping("/visitorMain")
     public String visitorMain(Model model){
-        return  "visitorMain";
+        return  "visitorMain";  // /visitorMain.html -> /visirotMain
     }
 
     // 내정보
