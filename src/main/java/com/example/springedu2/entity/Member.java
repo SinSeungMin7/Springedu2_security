@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+// @Entity -> db table
 @Entity
 @Table(name="members")   // table 이름 변경
 @Getter
@@ -21,7 +22,7 @@ public class Member {  // 회원
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // 번호 자동증가
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)  // NotNull, UNIQUE, varchar(30)
+    @Column( nullable = false, unique = true, length = 30)  // NotNull, UNIQUE, varchar(30)
     private String username;    // 로그인 id
 
     @Column(nullable = false)  // BCrypt 암호화 통가하면 길이가 길어진다 length 지정안함
