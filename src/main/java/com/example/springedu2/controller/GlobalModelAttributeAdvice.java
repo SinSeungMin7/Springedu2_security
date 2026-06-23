@@ -20,7 +20,6 @@ import org.springframework.web.servlet.HandlerMapping;
 
 GlobalModelAttributeAdvice는 모든 MVC 컨트롤러 실행 전에 공통으로 실행되어, 현재 요청을 처리할 컨트롤러 정보를 로그로 출력하고,
  로그인 상태와 관리자 여부를 Model에 담아 Thymeleaf 화면에서 사용할 수 있게 해주는 클래스입니다.
- 로그인 코드를 만들때 이걸 사용하면 된다 아니면 응용하면된다
  */
 
 @ControllerAdvice(annotations = Controller.class)
@@ -29,10 +28,9 @@ public class GlobalModelAttributeAdvice {
     private static final Logger log = LoggerFactory.getLogger(GlobalModelAttributeAdvice.class);
 
     /* 이 메서드는 컨트롤러의 요청 처리 메서드가 실행되기 전에 자동 실행됩니다.
-
         사용자가 URL 요청
            ↓
-        Spring Security가 Authentication 준비  => Security가 로그인을 체크해서 로그인 정보를 담는 Authentication을 준비한다
+        Spring Security가 Authentication 준비
            ↓
         Spring MVC가 요청을 처리할 Controller 메서드 결정
            ↓
@@ -59,9 +57,9 @@ public class GlobalModelAttributeAdvice {
             HttpServletRequest request
     ) {
         // 현재 요청을 처리할 Controller와 메서드 찾기
-        Object handler = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
+       Object handler = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
 
-        if (handler instanceof HandlerMethod handlerMethod) {
+       if (handler instanceof HandlerMethod handlerMethod) {
             // `handler`가
             // 일반적인 `@GetMapping`, `@PostMapping` 요청이면 대부분 `HandlerMethod`입니다.
             // 하지만 다음과 같은 경우 '/css/style.css', '/img/logo.png', '/error' 는 아닐 수 있습니다.
@@ -73,11 +71,10 @@ public class GlobalModelAttributeAdvice {
             //  Controller 메서드명 가져오기
             String methodName = handlerMethod.getMethod().getName();
 
-            // 로그 룰력 : [GET] /vlist -> VisitorController.list()
-            // {} 안에 각각 들어간다
+            // 로긏 룰력 : [GET] /vlist -> VisitorController.list()
             log.info("[{}] {} -> {}.{}()",
                     request.getMethod(),      // GET, POST, PUT
-                    request.getRequestURI(),  // 요청주소 URI
+                    request.getRequestURI(),  // 요청주소
                     controllerName,           // 어떤 Controller
                     methodName                // 어떤 함수
             );
@@ -85,8 +82,8 @@ public class GlobalModelAttributeAdvice {
 
         // 로그인 여부 확인
         // Authentication 객체가 있는가?
-        // 인증 상태인가?  =>  로그인이 되어있는가
-        // 익명 사용자가 아닌가? => 권한이 있는가
+        // 인증 상태인가? 로그인되었나
+        // 익명 사용자가 아닌가? 권한이 있는가
         boolean loggedIn = authentication != null
                 && authentication.isAuthenticated()
                 && !(authentication instanceof AnonymousAuthenticationToken);
@@ -102,17 +99,20 @@ public class GlobalModelAttributeAdvice {
         // 로그인하지 않은 상태라면 빈 문자열이 들어갑니다.
         model.addAttribute("loginUsername", loggedIn ? authentication.getName() : "");
 
+
         //  관리자 여부 확인
         // 현재 로그인 사용자가 관리자 권한을 가지고 있는지 확인
         // ROLE_ADMIN 관리자  ROLE_USER :일반 사용자
         boolean isAdmin = loggedIn && authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                // 권한 객체 목록에서 권한 문자열만 꺼내는 코드
-                // == .map(authority -> authority.getAuthority()).toList()   //  ["ROLE_ADMIN", "ROLE_USER"]
+                 // 권한 객체 목록에서 권한 문자열만 꺼내는 코드
+                 // == .map(authority -> authority.getAuthority()).toList()   //  ["ROLE_ADMIN", "ROLE_USER"]
                 .anyMatch("ROLE_ADMIN"::equals);
-        // == .anyMatch(authority -> "ROLE_ADMIN".equals(authority))  // 하지만 이 방식은 authority가 null이면 오류가 납니다.
+                // == .anyMatch(authority -> "ROLE_ADMIN".equals(authority))  // 하지만 이 방식은 authority가 null이면 오류가 납니다.
 
         // Model에 관리자 여부 추가
         model.addAttribute("isAdmin", isAdmin);
+
+        System.out.println("model:" + model.toString());
     }
 }
